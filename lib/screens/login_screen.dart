@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_page/widgets/login_card.dart';
 import 'package:login_page/widgets/snackbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:login_page/pages/home_page.dart';
+import 'package:login_page/screens/home_scren.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,35 +16,12 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  FocusNode _loginEmailFocusNode = FocusNode();
+  FocusNode _loginPasswordFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus();
-  }
-
-  Future<void> _saveLoginStatus(String role) async {
-    final prefs = await SharedPreferences.getInstance();
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final expirationTime = now + 3600000;
-
-    await prefs.setBool('isLoggedIn', true);
-    await prefs.setInt('expirationTime', expirationTime);
-    await prefs.setString('role', role);
-  }
-
-  Future<void> _checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    final expirationTime = prefs.getInt('expirationTime') ?? 0;
-    final now = DateTime.now().millisecondsSinceEpoch;
-
-    if (isLoggedIn && expirationTime > now) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    }
   }
 
   void _login() {
@@ -57,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
                 _passwordController.text == '12345678') ||
             (_usernameController.text == 'user' &&
                 _passwordController.text == '12345678')) {
-          _saveLoginStatus(_usernameController.text); // Simpan status login
           ScaffoldMessenger.of(context);
           General.showSnackBar(context, 'Berhasil Login');
           Navigator.pushReplacement(
@@ -93,6 +68,11 @@ class _LoginPageState extends State<LoginPage> {
           setState(() => _isPasswordVisible = !_isPasswordVisible);
         },
         onLogin: _login,
+        onTap: () {
+          // Unfocus jika ada text field yang aktif
+          _loginEmailFocusNode.unfocus();
+          _loginPasswordFocusNode.unfocus();
+        },
       ),
     );
   }

@@ -8,6 +8,7 @@ class LoginCard extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onTogglePassword;
   final VoidCallback onLogin;
+  final VoidCallback onTap;
 
   const LoginCard({
     super.key,
@@ -18,10 +19,20 @@ class LoginCard extends StatelessWidget {
     required this.isLoading,
     required this.onTogglePassword,
     required this.onLogin,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: GestureDetector(
+        child: Stack(
+          children: [
+            Container(width: double.infinity, color: Colors.white),
+            Container(width: double.infinity, color: Colors.black),
+          ],
+        ),
+      ),
+    );
   }
 }
