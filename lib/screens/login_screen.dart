@@ -16,8 +16,6 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
-  FocusNode _loginEmailFocusNode = FocusNode();
-  FocusNode _loginPasswordFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -68,11 +66,6 @@ class _LoginPageState extends State<LoginPage> {
           setState(() => _isPasswordVisible = !_isPasswordVisible);
         },
         onLogin: _login,
-        onTap: () {
-          // Unfocus jika ada text field yang aktif
-          _loginEmailFocusNode.unfocus();
-          _loginPasswordFocusNode.unfocus();
-        },
       ),
     );
   }
